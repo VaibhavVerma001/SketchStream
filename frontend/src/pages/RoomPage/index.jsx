@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import {  useRef, useState } from "react"
 import "./index.css"
 import WhiteBoard from "../../components/Whiteboard";
 
