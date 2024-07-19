@@ -6,8 +6,37 @@ const roughGenerator = rough.generator();
 
 const WhiteBoard = ({ canvasRef, ctxRef, elements, setElements, tool, color, user, socket }) => {
 
+  const [img, setImg] = useState(null); 
+
+  useEffect(() => {
+    socket.on("whiteBoardDataResponse", (data) => {
+      setImg(data.imageURL);
+    });
+  },[])
+
+
+
+  if(!user?.presenter){
+    return (
+      <div
+      className="border border-dark border-3 h-100 w-100 overflow-hidden"
+    >
+    <img src={img} 
+    alt="Real time WhiteBoard image shared by presenter" 
+    // className="w-100 h-100"
+    style={{
+      height: window.innerHeight * 2,
+      width: "285%",
+    }}
+    />
+
+    </div>
+    );
+  }
+
 
   const [isDrawing, setIsDrawing] = useState(false);
+
 
   useEffect(()=>{
     const canvas = canvasRef.current;
@@ -74,8 +103,8 @@ const WhiteBoard = ({ canvasRef, ctxRef, elements, setElements, tool, color, use
       }
     });
 
-    const canvasIamge = canvasRef.current.toDataURL();
-    socket.emit("whiteboardData", canvasIamge)
+    const canvasImage = canvasRef.current.toDataURL();
+    socket.emit("whiteboardData", canvasImage);
 
   }
   },[elements])
@@ -196,22 +225,7 @@ const WhiteBoard = ({ canvasRef, ctxRef, elements, setElements, tool, color, use
     setIsDrawing(false);
   }
 
-  if(user?.presenter){
-    return (
-      <div
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUP}
-      className="border border-dark border-3 h-100 w-100 overflow-hidden"
-    >
-      <canvas ref={canvasRef}/>
-    <img src="" 
-    alt="Real time WhiteBoard image shared by presenter" 
-    className="w-100 h-100"/>
 
-    </div>
-    );
-  }
 
 
 
