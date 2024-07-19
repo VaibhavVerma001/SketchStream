@@ -39,6 +39,17 @@ io.on("connection", (socket) => {
         });
     });
 
+    socket.on("message", (data) => {
+        const { message } = data;
+        const user = getUser(socket.id);
+        if (user) {
+          socket.broadcast
+            .to(roomIdGlobal)
+            .emit("messageResponse", { message, name: user.name });
+        }
+      });
+
+
     socket.on("disconnect", (data) => {
         const user = getUser(socket.id);
         if(user){

@@ -1,6 +1,7 @@
 import {  useRef, useState } from "react"
 import "./index.css"
 import WhiteBoard from "../../components/Whiteboard";
+import Chat from "../../components/ChatBar";
 
 const RoomPage = ({user, socket, users}) => {
 
@@ -11,6 +12,7 @@ const RoomPage = ({user, socket, users}) => {
     const [elements, setElements] = useState([]);
     const [history, setHistory] = useState([]);
     const [openedUserTab, setOpenedUserTab] = useState(false);
+    const [openedChatTab, setOpenedChatTab] = useState(false);
 
 
     const handleClearCanvas = () => {
@@ -44,10 +46,17 @@ const RoomPage = ({user, socket, users}) => {
   return (
     <div className="row">
         <button type="button" className="btn btn-dark" 
-        style={{display: "block", position: "absolute", top: "5%", left: "5%", height: "40px", width: "100px", }}
+        style={{display: "block", position: "absolute", top: "5%", left: "3%", height: "40px", width: "100px", }}
         onClick={() => setOpenedUserTab(true)} 
         >
             Users
+        </button>
+
+        <button type="button" className="btn btn-primary" 
+        style={{display: "block", position: "absolute", top: "5%", left: "10%", height: "40px", width: "100px", }}
+        onClick={() => setOpenedChatTab(true)} 
+        >
+            Chats
         </button>
 
         {
@@ -72,6 +81,14 @@ const RoomPage = ({user, socket, users}) => {
                 </div>
   )
         }
+
+        {
+            openedChatTab && (
+                <Chat setOpenedChatTab={setOpenedChatTab} socket={socket} />
+            )
+        }
+
+
         <h1 className="text-center py-4">White Board <span className="text-primary">[Users Online: {users.length}]</span></h1>
         {
             user?.presenter && (
